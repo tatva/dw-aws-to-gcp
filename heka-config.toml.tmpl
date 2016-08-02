@@ -1,0 +1,23 @@
+#!/bin/bash
+
+KAFKA_PART_START=0;
+KAFKA_PART_END=9;
+
+export KAFKA_TOPIC="LogLogin";
+export KAFKA_PORT="9092";
+
+
+for i in $(seq ${KAFKA_PART_START} ${KAFKA_PART_END}); do
+cat <<EOF
+[GCPKafkaInput${i}]
+type = "KafkaInput"
+topic = "%ENV[KAFKA_TOPIC]"
+addrs = ["%ENV[KAFKA_HOST]:%ENV[KAFKA_PORT]"]
+splitter = "KafkaSplitter"
+decoder = "ProtobufDecoder"
+partition = ${i}
+group = "llheka-gcp-log"
+offset_method = "Newest"
+
+EOF
+done
