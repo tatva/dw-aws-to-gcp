@@ -1,0 +1,15 @@
+# ECS=
+llheka-gcp-es-loglogin:
+  image: dw-heka-gcp:latest
+  environment:
+    - KAFKA_PART_END=19
+    - KAFKA_HOSTS= ('kafka-phx0.lindenlab.com:9092', 
+                    'kafka-phx1.lindenlab.com:9092', 
+                    'kafka-phx2.lindenlab.com:9092', 
+                    'kafka-phx3.lindenlab.com:9092', 
+                    'kafka-phx4.lindenlab.com:9092', 
+                    'kafka-phx5.lindenlab.com:9092', 
+                    'kafka-phx6.lindenlab.com:9092', 
+                    'kafka-phx7.lindenlab.com:9092')
+    - KAFKA_TOPIC=LogLogin
+  
