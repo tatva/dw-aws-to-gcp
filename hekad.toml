@@ -1,0 +1,129 @@
+
+[JsonDecoder]
+type = "SandboxDecoder"
+filename = "lua_decoders/json.lua"
+
+        [JsonDecoder.config]
+        payload_keep = true
+        map_fields = true
+        type = "LogLogin"
+
+[GCPKafkaInput0]
+type = "KafkaInput"
+topic = ""
+addrs = ""
+splitter = "KafkaSplitter"
+#decoder = "ProtobufDecoder"
+decoder = "JsonDecoder"
+partition = 0
+group = "llheka-gcp-log"
+offset_method = "Newest"
+
+[GCPKafkaInput1]
+type = "KafkaInput"
+topic = ""
+addrs = ""
+splitter = "KafkaSplitter"
+#decoder = "ProtobufDecoder"
+decoder = "JsonDecoder"
+partition = 1
+group = "llheka-gcp-log"
+offset_method = "Newest"
+
+[GCPKafkaInput2]
+type = "KafkaInput"
+topic = ""
+addrs = ""
+splitter = "KafkaSplitter"
+#decoder = "ProtobufDecoder"
+decoder = "JsonDecoder"
+partition = 2
+group = "llheka-gcp-log"
+offset_method = "Newest"
+
+[GCPKafkaInput3]
+type = "KafkaInput"
+topic = ""
+addrs = ""
+splitter = "KafkaSplitter"
+#decoder = "ProtobufDecoder"
+decoder = "JsonDecoder"
+partition = 3
+group = "llheka-gcp-log"
+offset_method = "Newest"
+
+[GCPKafkaInput4]
+type = "KafkaInput"
+topic = ""
+addrs = ""
+splitter = "KafkaSplitter"
+#decoder = "ProtobufDecoder"
+decoder = "JsonDecoder"
+partition = 4
+group = "llheka-gcp-log"
+offset_method = "Newest"
+
+[GCPKafkaInput5]
+type = "KafkaInput"
+topic = ""
+addrs = ""
+splitter = "KafkaSplitter"
+#decoder = "ProtobufDecoder"
+decoder = "JsonDecoder"
+partition = 5
+group = "llheka-gcp-log"
+offset_method = "Newest"
+
+[GCPKafkaInput6]
+type = "KafkaInput"
+topic = ""
+addrs = ""
+splitter = "KafkaSplitter"
+#decoder = "ProtobufDecoder"
+decoder = "JsonDecoder"
+partition = 6
+group = "llheka-gcp-log"
+offset_method = "Newest"
+
+[GCPKafkaInput7]
+type = "KafkaInput"
+topic = ""
+addrs = ""
+splitter = "KafkaSplitter"
+#decoder = "ProtobufDecoder"
+decoder = "JsonDecoder"
+partition = 7
+group = "llheka-gcp-log"
+offset_method = "Newest"
+
+[GCPKafkaInput8]
+type = "KafkaInput"
+topic = ""
+addrs = ""
+splitter = "KafkaSplitter"
+#decoder = "ProtobufDecoder"
+decoder = "JsonDecoder"
+partition = 8
+group = "llheka-gcp-log"
+offset_method = "Newest"
+
+[GCPKafkaInput9]
+type = "KafkaInput"
+topic = ""
+addrs = ""
+splitter = "KafkaSplitter"
+#decoder = "ProtobufDecoder"
+decoder = "JsonDecoder"
+partition = 9
+group = "llheka-gcp-log"
+offset_method = "Newest"
+
+
+[PayloadEncoder]
+append_newlines = true
+
+[counter_output]
+type = "LogOutput"
+message_matcher = "Type == 'LogLogin'"
+encoder = "PayloadEncoder"
+

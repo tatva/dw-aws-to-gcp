@@ -1,23 +1,62 @@
 #!/bin/bash
 
+cat <<EOF
+
+[hekad]
+maxprocs = 2
+
+
+[JsonDecoder]
+type = "SandboxDecoder"
+filename = "lua_decoders/json.lua"
+
+        [JsonDecoder.config]
+        payload_keep = true
+        map_fields = true
+        type = "LogLogin"
+
+EOF
+
 KAFKA_PART_START=0;
 KAFKA_PART_END=9;
-
-export KAFKA_TOPIC="LogLogin";
-export KAFKA_PORT="9092";
-
 
 for i in $(seq ${KAFKA_PART_START} ${KAFKA_PART_END}); do
 cat <<EOF
 [GCPKafkaInput${i}]
 type = "KafkaInput"
-topic = "%ENV[KAFKA_TOPIC]"
-addrs = ["%ENV[KAFKA_HOST]:%ENV[KAFKA_PORT]"]
-splitter = "KafkaSplitter"
-decoder = "ProtobufDecoder"
+topic = "${KAFKA_TOPIC}"
+addrs = ${KAFKA_SERVERS}
+#splitter = "KafkaSplitter"
+#decoder = "ProtobufDecoder"
+decoder = "JsonDecoder"
 partition = ${i}
 group = "llheka-gcp-log"
 offset_method = "Newest"
 
 EOF
 done
+
+cat <<EOF
+
+[PayloadEncoder]
+append_newlines = true
+
+[counter_output]
+type = "LogOutput"
+message_matcher = "Type == 'LogLogin'"
+encoder = "PayloadEncoder"
+
+EOF
+
+
+cat <<EOF
+
+[HekaPubsubOutput]
+type = "PubsubOutput"
+message_matcher = "Type == 'LogLogin'"
+project_id = "ll-poc"
+topic_name = "tatva-test"
+app_credentials = "/Users/tatva/LL-POC-3a8ac584ac09.json"
+
+
+EOF

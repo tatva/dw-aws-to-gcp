@@ -2,11 +2,15 @@ FROM ubuntu:14.04
 
 MAINTAINER tatva@lindenlab.com
 
+ENV KAFKA_TOPIC LogLogin
+ENV KAFKA_SERVERS='["kafka-phx0.lindenlab.com:9092","kafka-phx1.lindenlab.com:9092",\
+"kafka-phx2.lindenlab.com:9092","kafka-phx3.lindenlab.com:9092","kafka-phx4.lindenlab.com:9092", \
+"kafka-phx5.lindenlab.com:9092","kafka-phx6.lindenlab.com:9092","kafka-phx7.lindenlab.com:9092", \
+"kafka-phx8.lindenlab.com:9092","kafka-phx9.lindenlab.com:9092"]'
+
 ### Update system
 RUN apt-get update && apt-get -y upgrade
 RUN apt-get install -y wget ca-certificates build-essential git mercurial bzr
-
-RUN echo "Installing 1.5"
 
 # install golang 1.5
 
@@ -15,6 +19,8 @@ RUN tar -C /usr/local -xzf go1.5.4.linux-amd64.tar.gz
 
 ENV PATH $PATH:/usr/local/go/bin
 ENV GOPATH /usr/local/go/
+
+VOLUME /config /Users/tatva/Dropbox/linden_work/dw-aws-to-gcp/vol
 
 
 RUN apt-get install -y cmake python-sphinx protobuf-compiler debhelper && \
@@ -42,6 +48,7 @@ RUN git checkout versions/0.10
 RUN /bin/bash -c 'source build.sh'
 
 COPY heka-config.toml.tmpl /app/heka-config.toml.tmpl
+RUN chmod a+x /app/heka-config.toml.tmpl
 
 RUN mkdir -p /usr/share/heka/lua_decoders && \
     mkdir -p /usr/share/heka/lua_encoders && \
@@ -55,4 +62,7 @@ RUN mkdir -p /usr/share/heka/lua_decoders && \
 EXPOSE 4881
 
 WORKDIR /heka/build/heka/bin
-#CMD ["/heka/build/heka/bin/hekad", "--config", "/app/config.toml"]
+
+CMD ["sh", /app/heka-config.toml.tmpl", ">", "/config/hekad.toml"]
+
+CMD ["/heka/build/heka/bin/hekad", "--config", "/config/hekad.toml"]
